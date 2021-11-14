@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>墨水屏天气预报站 | ヾ(•ω•`)o</title><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><link rel="stylesheet" href="/dist/build.css?v=1633679241878.css"><link rel="stylesheet" href="/dist/custom.css?v=1633679241878.css"><script>window.isPost=!0,window.aomori={},window.aomori_logo_typed_animated=!1,window.aomori_search_algolia=!1</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container"><header class="header"><div class="header-type"><div class="header-type-inner"><a class="header-type-title" href="/">ヾ(•ω•`)o</a></div></div><div class="header-menu"><div class="header-menu-inner"></div><div class="header-menu-social"></div></div><div class="header-menu-mobile"><div class="header-menu-mobile-inner" id="mobile-menu-open"><i class="icon icon-menu"></i></div></div></header><div class="header-menu-mobile-menu"><div class="header-menu-mobile-menu-bg"></div><div class="header-menu-mobile-menu-wrap"><div class="header-menu-mobile-menu-inner"><div class="header-menu-mobile-menu-close" id="mobile-menu-close"><i class="icon icon-cross"></i></div><div class="header-menu-mobile-menu-list"></div></div></div></div></div><div class="container"><div class="main"><section class="inner"><section class="inner-main"><div class="post"><article id="post-cksueinrt000ku4n5g97o2rpv" class="article article-type-post" itemscope itemprop="blogPost"><div class="article-inner"><header class="article-header"><h1 class="article-title" itemprop="name">墨水屏天气预报站</h1></header><div class="article-more-info article-more-info-post hairline"><div class="article-date"><time datetime="2021-07-26T10:14:21.000Z" itemprop="datePublished">2021-07-26</time></div><div class="article-tag"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DIY/" rel="tag">DIY</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%99%E7%A8%8B/" rel="tag">教程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%AB%98%E4%B8%AD/" rel="tag">高中</a></li></ul></div></div><div class="article-entry post-inner-html hairline" itemprop="articleBody"><h2 id="0-效果预览"><a href="#0-效果预览" class="headerlink" title="0.效果预览"></a>0.效果预览</h2><p>最近在B站上看到很多用墨水屏制作的天气预报站，自己也很想做一个，所以趁现在才高二，决定在玩一把，高三就好好学习（可能吗emmmm）</p><span id="more"></span><h2 id="1-材料"><a href="#1-材料" class="headerlink" title="1.材料"></a>1.材料</h2><ul><li>4.2寸墨水屏（裸屏）(<a target="_blank" rel="noopener" href="https://www.waveshare.net/wiki/4.2inch_e-Paper_Module_(B)">4.2inch e-Paper Module (B)</a>)（￥126）</li><li>ESP8266驱动板(<a target="_blank" rel="noopener" href="https://www.waveshare.net/wiki/E-Paper_ESP8266_Driver_Board">E-Paper ESP8266 Driver Board</a>)（￥73）</li><li>2000mah电池（￥10）</li><li>充电模块（￥2）</li><li>开关，按钮，导线若干（约￥15）</li></ul><h2 id="2-代码"><a href="#2-代码" class="headerlink" title="2.代码"></a>2.代码</h2><h3 id="2-1-库"><a href="#2-1-库" class="headerlink" title="2.1 库"></a>2.1 库</h3><p>需要库文件：</p><ul><li><code>ESP8266WiFi.h</code> （安装过程百度）</li><li><code>ESP8266_Seniverse.h</code>(<a target="_blank" rel="noopener" href="http://www.taichi-maker.com/homepage/iot-development/iot-platform/seniverse/esp8266-seniverse-library/">ESP8266-Seniverse库使用说明</a>)</li><li><code>NTPClient.h</code> 获取网络时间 （直接在Arduino 管理库 中搜索安装）</li><li><code>WiFiUdp.h</code> （直接在Arduino 管理库 中搜索安装）</li><li><code>esp8266-waveshare-epd</code> (<a target="_blank" rel="noopener" href="https://www.waveshare.net/w/upload/d/d5/E-Paper_ESP8266_Driver_Board_Code.7z">微雪的墨水屏驱动库下载</a>)</li></ul><p><code>Arduino</code>库所在的文件夹：</p><img src="https://pic.imgdb.cn/item/611f6d844907e2d39c7b2460.png" alt="03" style="zoom:50%"><h3 id="2-2-心知天气库的使用"><a href="#2-2-心知天气库的使用" class="headerlink" title="2.2 心知天气库的使用"></a>2.2 心知天气库的使用</h3><p>先在 <a target="_blank" rel="noopener" href="https://www.seniverse.com/">心知天气</a> 中注册开发者，用免费版，在控制台中获取密钥。</p><p>安装完 <code>ESP8266-Seniverse</code> 库后</p><p>对<code>\Arduino\libraries\ESP8266-Seniverse\src</code>中<code>Forecast.cpp</code>进行修改，在<code>24</code>行左右，<code>&amp;language=en</code>改成<code>&amp;language=zh-Hans</code>，即可输出中文，其他同理。</p><h3 id="2-3-微雪驱动库的使用注意点"><a href="#2-3-微雪驱动库的使用注意点" class="headerlink" title="2.3 微雪驱动库的使用注意点"></a>2.3 微雪驱动库的使用注意点</h3><p>该库将屏幕一分为二，即<strong>上下</strong>两半，<em>超出屏幕范围会报错</em>，即两块400*150的屏幕</p><pre><code class="c">Paint_DrawLine(x_start, y_start, x_end, y_end, BLACK, DOT_PIXEL_1X1, LINE_STYLE_SOLID);  //画线
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>墨水屏天气预报站 | ヾ(•ω•`)o</title><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><link rel="stylesheet" href="/dist/build.css?v=1633679241878.css"><link rel="stylesheet" href="/dist/custom.css?v=1633679241878.css"><script>window.isPost=!0,window.aomori={valine:{enable:!0,appId:"m5ow1hbxjDJYTIykdyOanglO-gzGzoHsz",appKey:"sEyCRCKRYqhGh0SUv8gcEn8A"}},window.aomori_logo_typed_animated=!1,window.aomori_search_algolia=!1</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container"><header class="header"><div class="header-type"><div class="header-type-inner"><a class="header-type-title" href="/">ヾ(•ω•`)o</a></div></div><div class="header-menu"><div class="header-menu-inner"></div><div class="header-menu-social"></div></div><div class="header-menu-mobile"><div class="header-menu-mobile-inner" id="mobile-menu-open"><i class="icon icon-menu"></i></div></div></header><div class="header-menu-mobile-menu"><div class="header-menu-mobile-menu-bg"></div><div class="header-menu-mobile-menu-wrap"><div class="header-menu-mobile-menu-inner"><div class="header-menu-mobile-menu-close" id="mobile-menu-close"><i class="icon icon-cross"></i></div><div class="header-menu-mobile-menu-list"></div></div></div></div></div><div class="container"><div class="main"><section class="inner"><section class="inner-main"><div class="post"><article id="post-cksueinrt000ku4n5g97o2rpv" class="article article-type-post" itemscope itemprop="blogPost"><div class="article-inner"><header class="article-header"><h1 class="article-title" itemprop="name">墨水屏天气预报站</h1></header><div class="article-more-info article-more-info-post hairline"><div class="article-date"><time datetime="2021-07-26T10:14:21.000Z" itemprop="datePublished">2021-07-26</time></div><div class="article-tag"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DIY/" rel="tag">DIY</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%99%E7%A8%8B/" rel="tag">教程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%AB%98%E4%B8%AD/" rel="tag">高中</a></li></ul></div><div class="article-busuanzi">有 <span id="busuanzi_value_page_pv">N</span> 人看过</div></div><div class="article-entry post-inner-html hairline" itemprop="articleBody"><h2 id="0-效果预览"><a href="#0-效果预览" class="headerlink" title="0.效果预览"></a>0.效果预览</h2><p>最近在B站上看到很多用墨水屏制作的天气预报站，自己也很想做一个，所以趁现在才高二，决定在玩一把，高三就好好学习（可能吗emmmm）</p><img src="https://pic.imgdb.cn/item/61910bb42ab3f51d91d32bfc.jpg" alt="06_正面" style="zoom:80%"> <span id="more"></span><h2 id="1-材料"><a href="#1-材料" class="headerlink" title="1.材料"></a>1.材料</h2><ul><li>4.2寸墨水屏（裸屏）(<a target="_blank" rel="noopener" href="https://www.waveshare.net/wiki/4.2inch_e-Paper_Module_(B)">4.2inch e-Paper Module (B)</a>)（￥126）</li><li>ESP8266驱动板(<a target="_blank" rel="noopener" href="https://www.waveshare.net/wiki/E-Paper_ESP8266_Driver_Board">E-Paper ESP8266 Driver Board</a>)（￥73）</li><li>2000mah电池（￥10）</li><li>充电模块（￥2）</li><li>开关，按钮，导线若干（约￥15）</li><li>合计约￥250</li></ul><h2 id="2-代码"><a href="#2-代码" class="headerlink" title="2.代码"></a>2.代码</h2><h3 id="2-1-库"><a href="#2-1-库" class="headerlink" title="2.1 库"></a>2.1 库</h3><p>需要库文件：</p><ul><li><code>ESP8266WiFi.h</code> （安装过程百度）</li><li><code>ESP8266_Seniverse.h</code>(<a target="_blank" rel="noopener" href="http://www.taichi-maker.com/homepage/iot-development/iot-platform/seniverse/esp8266-seniverse-library/">ESP8266-Seniverse库使用说明</a>)</li><li><code>NTPClient.h</code> 获取网络时间 （直接在Arduino 管理库 中搜索安装）</li><li><code>WiFiUdp.h</code> （直接在Arduino 管理库 中搜索安装）</li><li><code>esp8266-waveshare-epd</code> (<a target="_blank" rel="noopener" href="https://www.waveshare.net/w/upload/d/d5/E-Paper_ESP8266_Driver_Board_Code.7z">微雪的墨水屏驱动库下载</a>)</li></ul><p><code>Arduino</code>库所在的文件夹：位于以下目录的 <code>\libraries</code> 中</p><img src="https://pic.imgdb.cn/item/611f6d844907e2d39c7b2460.png" alt="03" style="zoom:50%"><h3 id="2-2-心知天气库的使用"><a href="#2-2-心知天气库的使用" class="headerlink" title="2.2 心知天气库的使用"></a>2.2 心知天气库的使用</h3><p>先在 <a target="_blank" rel="noopener" href="https://www.seniverse.com/">心知天气</a> 中注册开发者，用免费版，在控制台中获取<em>密钥</em>。</p><p>安装完 <code>ESP8266-Seniverse</code> 库后</p><p>对<code>\Arduino\libraries\ESP8266-Seniverse\src</code>中<code>Forecast.cpp</code>进行修改，在<code>24</code>行左右，<code>&amp;language=en</code>改成<code>&amp;language=zh-Hans</code>，即可输出中文，其他同理。</p><h3 id="2-3-微雪驱动库的使用注意点"><a href="#2-3-微雪驱动库的使用注意点" class="headerlink" title="2.3 微雪驱动库的使用注意点"></a>2.3 微雪驱动库的使用注意点</h3><p>该库将屏幕一分为二，即<strong>上下</strong>两半，<em>超出屏幕范围会报错</em>，即两块400*150的屏幕</p><pre><code class="c">Paint_DrawLine(x_start, y_start, x_end, y_end, BLACK, DOT_PIXEL_1X1, LINE_STYLE_SOLID);  //画线
 Paint_DrawRectangle(x_start, y_start, x_end, y_end, BLACK, DOT_PIXEL_1X1, DRAW_FILL_FULL);  //画矩形
 Paint_DrawString_CN(x, y, &quot;TEXT&quot;, &amp;Font12CN, BLACK, WHITE);  // 写字（中文）
 Paint_DrawString_CN(x, y, &quot;TEXT&quot;, &amp;Font16, WHITE, BLACK);  // 写字（英文），注意中英文字体颜色顺序反的
@@ -16,7 +16,7 @@ Paint_DrawString_CN(x, y, &quot;TEXT&quot;, &amp;Font16, WHITE, BLACK);  // 写�
  ⊦-fonts.h  (需要修改)
  ⊦-GUI_Paint.cpp
  ⊦-GUI_Paint.h
-</code></pre><p><code>font&#123;num&#125;.cpp</code>是英文字符，<code>font&#123;num&#125;CN.c</code>是中文字库，根据需要进行删改，建议尽量减少字符数。</p><p>增删字库需要修改<code>fonts.h</code>，按照它的格式写就行。</p><p>然后参考原有字库的形式，创建其他文件，写不同大小的文字，也可以将图标作为字库写进去，个人采取这个方法。</p><p><strong>似乎有更好的对文字和图片的处理方法，但我懒得去找了。</strong></p><p>汉字取模原理</p><p><img src="https://pic.imgdb.cn/item/611f1c204907e2d39cc4cadf.png" alt="02_取模"></p><p>大致过程（此处以“你”为例）：如图，文字宽度必须为8的倍数，不足用“0”补齐，高度任意。将文字如图切割，每8个像素为一组，黑色取1，白色取0，然后对这8个数字转化成16进制，最后连成一段数组。</p><p>不过汉字取模有现成的工具 <code>zimo221</code> ，通过这个软件对需要的文字和图片进行取模，网上应该有，找不到可以从这里<a target="_blank" rel="noopener" href="https://znluckye.lanzoui.com/i00FLsvw03e">直接下载</a>。</p><p>天气图片来自隔壁<code>和风天气</code>的黑白图标集：<a target="_blank" rel="noopener" href="https://github.com/qwd/WeatherIcon">Github链接</a></p><p>通过上述原理，通过简单的python程序，批量对图片处理、取模，得到天气图标，然后给图标随便取个名字，把他当成字库写进去。</p><p>以下为<code>python</code>代码，写的很烂，或许以后系统学编程的时候会笑出来吧–&lt;-&lt;-&lt;@</p><pre><code class="python">from PIL import Image  # 使用PIL处理图片
+</code></pre><p><code>font&#123;num&#125;.cpp</code>是英文字符，<code>font&#123;num&#125;CN.c</code>是中文字库，根据需要进行删改，建议尽量减少字符数。</p><p>增删字库需要修改<code>fonts.h</code>，按照它的格式写就行。</p><p>然后参考原有字库的形式，创建其他文件，写不同大小的文字，也可以将图标作为字库写进去，个人采取这个方法。</p><p><em>似乎有更好的对文字和图片的处理方法，但我懒得去找了。</em></p><p>汉字取模原理</p><p><img src="https://pic.imgdb.cn/item/611f1c204907e2d39cc4cadf.png" alt="02_取模"></p><p>大致过程（此处以“你”为例）：如图，文字宽度必须为8的倍数，不足用“0”补齐，高度任意。将文字如图切割，每8个像素为一组，黑色取1，白色取0，然后对这8个数字转化成16进制，最后连成一段数组。</p><p>不过汉字取模有现成的工具 <code>zimo221</code> ，通过这个软件对需要的文字和图片进行取模，网上应该有，找不到可以从这里直接下载：<a target="_blank" rel="noopener" href="https://znluckye.lanzoui.com/i00FLsvw03e">蓝奏云链接</a></p><p>天气图片来自隔壁<code>和风天气</code>的黑白图标集：<a target="_blank" rel="noopener" href="https://github.com/qwd/WeatherIcon">Github链接</a></p><p>通过上述原理，通过简单的python程序，批量对图片处理、取模，得到天气图标，然后给图标随便取个名字，把他当成字库写进去。</p><p>以下为<code>python</code>代码，写的很烂，或许以后系统学编程的时候会笑出来吧 –&lt;-&lt;-&lt;@</p><pre><code class="python">from PIL import Image  # 使用PIL处理图片
 
 def process(num):  # 图片处理
     img = Image.open(f&quot;WeatherIcon-master\weather-icon-S1\sa\\&#123;num&#125;.png&quot;)  # 路径
@@ -58,7 +58,7 @@ for i in range(len(oldName)):  # 按照字库格式输出
 
 print(&#39;----------------------&#39;)
 print(alls)
-</code></pre><h3 id="2-5-主程序"><a href="#2-5-主程序" class="headerlink" title="2.5 主程序"></a>2.5 主程序</h3><pre><code class="C++">#include &quot;DEV_Config.h&quot;
+</code></pre><h3 id="2-5-Arduino主程序"><a href="#2-5-Arduino主程序" class="headerlink" title="2.5 Arduino主程序"></a>2.5 Arduino主程序</h3><p>同样写的很烂，可读性很差，所以写了一堆注释。</p><pre><code class="C++">#include &quot;DEV_Config.h&quot;
 #include &quot;EPD.h&quot;
 #include &quot;GUI_Paint.h&quot;
 #include &lt;stdlib.h&gt;
@@ -108,7 +108,7 @@ void setup() &#123;
     if(isRefresh) pageHome();
     delay(5000);
   &#125;
-  ESP.deepSleep(4e9);  // 睡眠约1.1h，单位为μs，最大填 4294967295
+  ESP.deepSleep(4e9);  // 睡眠约1.1h，单位为μs，最大填 4294967295，该函数用于节约电能
 &#125;
 
 void loop() &#123;
@@ -157,18 +157,18 @@ void getWeek()&#123;
   &#125;
 &#125;
 
-// 屏幕刷新
+// 屏幕
 void pageHome()&#123;
   if(forecast.update())&#123;  // 获取天气
     String tempStr;  // 临时文本
     
-    Serial.println(&quot;EPD_4IN2B_V2_test Demo\r\n&quot;);
+    Serial.println(&quot;EPD_4IN2B_V2_test Demo\r\n&quot;);  //以下是初始化，反正别删
     DEV_Module_Init();
   
     Serial.print(&quot;e-Paper Init and Clear...\r\n&quot;);
     EPD_4IN2B_V2_Init();
     EPD_4IN2B_V2_Clear();
-    DEV_Delay_ms(500);
+    DEV_Delay_ms(500);  
     
     //Create a new image cache named IMAGE_BW and fill it with white
     UBYTE *Image; // black \Red or Yellow
@@ -184,11 +184,12 @@ void pageHome()&#123;
     //Select Image
     Paint_SelectImage(Image);
     Paint_Clear(WHITE);
+    // 初始化到此为止
     
-    //--黑--
-    // 上半部分
+    // --黑色--
+    // 上半屏幕
     Paint_Clear(WHITE);
-    //header
+    // 头部
     Paint_DrawRectangle(0, 0, 400, 24, BLACK, DOT_PIXEL_1X1, DRAW_FILL_FULL);
     Paint_DrawString_EN(5, 1, &quot;(^_^)&quot;, &amp;Font16, BLACK, WHITE);
     Paint_DrawString_CN(80, 1, &quot;更新时间：&quot;, &amp;Font12CN, WHITE, BLACK);
@@ -196,26 +197,31 @@ void pageHome()&#123;
     Paint_DrawRectangle(0, 20, 400, 24, WHITE, DOT_PIXEL_1X1, DRAW_FILL_FULL);
     if(wifiState) Paint_DrawString_EN(350, 3, &quot;WiFi&quot;, &amp;Font16, BLACK, WHITE);
  
-    //Left
+    // 左侧：日期（x月x日 星期几）
     tempStr = (String)(timeInfo -&gt; tm_mon + 1);
     if(timeInfo -&gt; tm_mon &lt; 9) tempStr = &quot;0&quot; + tempStr;
-    //Serial.println(tempStr);
     Paint_DrawString_CN(20, 45, tempStr.c_str(), &amp;Font24N, BLACK, WHITE);
     Paint_DrawString_CN(50, 45, &quot;月&quot;, &amp;Font24CN, BLACK, WHITE);
     tempStr = (String)(timeInfo -&gt; tm_mday);
     if(timeInfo -&gt; tm_mday &lt; 10) tempStr = &quot;0&quot; + tempStr;
-    //Serial.println(tempStr);
     Paint_DrawString_CN(80, 45, tempStr.c_str(), &amp;Font24N, BLACK, WHITE);
     Paint_DrawString_CN(110, 45, &quot;日&quot;, &amp;Font24CN, BLACK, WHITE);
     Paint_DrawString_CN(52, 88, nowWeek, &amp;Font12CN, BLACK, WHITE);
-
+    
+    // 左侧：“天气预报”这几个字
     Paint_DrawRectangle(0, 132, 160, 150, BLACK, DOT_PIXEL_1X1, DRAW_FILL_FULL);
     Paint_DrawString_CN(45, 132, &quot;天气预报&quot;, &amp;Font12CN, WHITE, BLACK);
-
+    
+    // 右侧：“距离高考还剩         天”
     Paint_DrawString_CN(172, 56, &quot;距离高考还剩         天&quot;, &amp;Font12CN, BLACK, WHITE);
+      
+    // 中间分割线
     Paint_DrawLine(165, 20, 165, 150, BLACK, DOT_PIXEL_1X1, LINE_STYLE_SOLID);
+      
+    // 右侧：给周几加个黑色背景
     Paint_DrawRectangle(170, 79, 395, 99, BLACK, DOT_PIXEL_1X1, DRAW_FILL_FULL);
-
+    
+    // 右侧：打印周几和前几行课程表
     const char* week[6] = &#123;&quot;周一&quot;, &quot;周二&quot;, &quot;周三&quot;, &quot;周四&quot;, &quot;周五&quot;, &quot;周六&quot;&#125;;
     for(byte j=0; j&lt;=5; j++)&#123;
       Paint_DrawString_CN(172+j*38, 81, week[j], &amp;Font12CN, WHITE, BLACK);
@@ -226,10 +232,11 @@ void pageHome()&#123;
       &#125;
     &#125;
     
-    EPD_4IN2B_V2_SendHalfBimage(0, Image);
+    EPD_4IN2B_V2_SendHalfBimage(0, Image);  // 别删
 
     // 下半部分
     Paint_Clear(WHITE);
+    // 左侧：绘制天气
     Paint_DrawString_CN(0, 0, weatherI(forecast.getDayCode(0)), &amp;Font48GUI, BLACK, WHITE);
     Paint_DrawString_CN(60, 5, forecast.getDayText(0).c_str(), &amp;Font12CN, BLACK, WHITE);
     tempStr = (String)forecast.getLow(0) + &quot;-&quot; + (String)forecast.getHigh(0);
@@ -259,9 +266,11 @@ void pageHome()&#123;
     Paint_DrawString_EN(85, 112, tempStr.c_str(), &amp;Font16, WHITE, BLACK);
     tempStr = (String)forecast.getHumidity(2) + &quot;%&quot;;
     Paint_DrawString_EN(85, 129, tempStr.c_str(), &amp;Font16, WHITE, BLACK);
-
+    
+    // 中间分割线
     Paint_DrawLine(165, 0, 165, 150, BLACK, DOT_PIXEL_1X1, LINE_STYLE_SOLID);
-
+    
+    // 右侧：课程表剩余部分
     for(byte j=0; j&lt;=5; j++)&#123;
       if(j != nowWeekNum)&#123;
         for(byte i=3; i&lt;=10; i++)&#123;
@@ -273,14 +282,10 @@ void pageHome()&#123;
     
     EPD_4IN2B_V2_SendHalfBimage(1, Image);
   
-    //--红--
-    //Serial.println(&quot;Draw red image\r\n&quot;);
+    // --红--
+    // 上半屏幕
     Paint_Clear(WHITE);
-
-    //header
-    if(!wifiState) Paint_DrawString_EN(350, 3, &quot;WiFi&quot;, &amp;Font16, WHITE, BLACK);
-
-    //倒计时
+    // 右侧上方的倒计时
     tempStr = (String)(int)(countDown / 100);
     Paint_DrawString_CN(284, 32, tempStr.c_str(), &amp;Font48N, BLACK, WHITE);
     tempStr = (String)(int)((countDown % 100) / 10);
@@ -288,15 +293,17 @@ void pageHome()&#123;
     tempStr = (String)(int)((countDown % 100) % 10);
     Paint_DrawString_CN(340, 32, tempStr.c_str(), &amp;Font48N, BLACK, WHITE);
 
-    //table
+    // 今日课程表变红
     if(nowWeekNum != 7)&#123;
       for(byte i=0; i&lt;=2; i++)&#123;
         Paint_DrawString_CN(172+nowWeekNum*38, 98+i*18, subject(pgm_read_byte(&amp;subjects[nowWeekNum][i])), &amp;Font12CN, BLACK, WHITE);
       &#125;
     &#125;
-  
+      
+      // 下半屏幕
     EPD_4IN2B_V2_SendHalfRYimage(0, Image);
 
+    // 今日课程表变红
     Paint_Clear(WHITE);
     if(nowWeekNum != 7)&#123;
       for(byte i=3; i&lt;=10; i++)&#123;
@@ -304,9 +311,8 @@ void pageHome()&#123;
       &#125;
     &#125;
     
+    // 屏幕刷新
     EPD_4IN2B_V2_SendHalfRYimage(1, Image);
-  
-    //Serial.println(&quot;EPD_Display\r\n&quot;);
     EPD_4IN2B_V2_TurnOnDisplay();
     DEV_Delay_ms(2000);
   
@@ -317,6 +323,7 @@ void pageHome()&#123;
   &#125;
 &#125;
 
+// 因为天气图标是以字库的形式写入，所以该函数用于获取用哪个图标
 char* weatherI(int id)&#123;
   switch(id)&#123;
     case 0: case 1: case 2: case 3: return &quot;晴&quot;;
@@ -344,7 +351,8 @@ char* subject(byte id)&#123;
   &#125;
 &#125;
 
-void timeUpdate()&#123;  // 时间更新
+// 时间更新
+void timeUpdate()&#123;
   timeClient.update();
   countDown = (1654617599 - (timeClient.getEpochTime() - 28800)) / 86400;
   //if((count - (int)count) &gt; 0) countDown++;
@@ -371,4 +379,4 @@ void timeUpdate()&#123;  // 时间更新
     Serial.println(isRefresh);
   &#125;
 &#125;
-</code></pre><h2 id="3-实物制作"><a href="#3-实物制作" class="headerlink" title="3.实物制作"></a>3.实物制作</h2><h3 id="3-1-电路图"><a href="#3-1-电路图" class="headerlink" title="3.1  电路图"></a>3.1 电路图</h3><img src="https://pic.imgdb.cn/item/611f9ed94907e2d39cd19701.png" alt="04" style="zoom:67%"><p>该电路用于ESP8266睡眠后自动唤醒，加一个开关是因为D0和RST短接时，无法正常烧录程序，为了后续方便更新程序，所以加个开关。</p></div></div><nav class="article-nav"><a href="/posts/archives/8b8a8c83.html/" id="article-nav-older" class="article-nav-link-wrap"><div class="article-nav-caption">上一篇</div><div class="article-nav-title">关于本站</div></a></nav><section class="share"><div class="share-title">分享</div><a class="share-item" target="_blank" href="https://twitter.com/share?text=墨水屏天气预报站 - ヾ(•ω•`)o&url=https://blog.znluckye.top/posts/archives/a871caea.html/"><box-icon type="logo" name="twitter"></box-icon></a><a class="share-item" target="_blank" href="https://www.facebook.com/sharer.php?title=墨水屏天气预报站 - ヾ(•ω•`)o&u=https://blog.znluckye.top/posts/archives/a871caea.html/"><box-icon name="facebook-square" type="logo"></box-icon></a></section></article></div></section></section><aside class="sidebar"><div class="widget" id="widget"><div class="widget-wrap"><div class="widget-inner"><div class="toc post-toc-html"></div></div></div><div class="widget-wrap widget-tags"><div class="widget-title"><span>Tags</span></div><div class="widget-inner"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DIY/" rel="tag">DIY</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%99%E7%A8%8B/" rel="tag">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%AB%99/" rel="tag">网站</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E4%B8%AD/" rel="tag">高中</a></li></ul></div></div><div class="widget-wrap widget-recent-posts"><div class="widget-title"><span>Recent Posts</span></div><div class="widget-inner"><ul><li><a href="/posts/archives/a871caea.html/">墨水屏天气预报站</a></li><li><a href="/posts/archives/8b8a8c83.html/">关于本站</a></li></ul></div></div><div class="widget-wrap widget-archive"><div class="widget-title"><span>Archive</span></div><div class="widget-inner"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul></div></div></div><div id="backtop"><i class="icon icon-arrow-up"></i></div></aside></div></div><footer class="footer"><div class="footer-wave"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg></div><div class="footer-wrap"><div class="footer-inner">ヾ(•ω•`)o &copy; 2021<br>Powered By Hexo · Theme By <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Aomori</a></div></div></footer><script src="/dist/build.js?1633679241878.js"></script><script src="/dist/custom.js?1633679241878.js"></script></body></html>
+</code></pre><h2 id="3-实物制作"><a href="#3-实物制作" class="headerlink" title="3.实物制作"></a>3.实物制作</h2><h3 id="3-1-烧录程序"><a href="#3-1-烧录程序" class="headerlink" title="3.1 烧录程序"></a>3.1 烧录程序</h3><p>直接上传即可，上传完可能会警告“可用内存偏低，可能出现稳定性问题”，能运行就别管。</p><h3 id="3-2-电路图"><a href="#3-2-电路图" class="headerlink" title="3.2  电路图"></a>3.2 电路图</h3><img src="https://pic.imgdb.cn/item/611f9ed94907e2d39cd19701.png" alt="04" style="zoom:67%"><p>该电路用于ESP8266睡眠后自动唤醒，加一个开关是因为D0和RST短接时，无法正常烧录程序，为了后续方便更新程序，所以加个开关。</p><p>不装电池可以无视一部分。</p><p>我的乱七八糟的内部图</p><p><img src="https://pic.imgdb.cn/item/61910be82ab3f51d91d33b54.jpg" alt="07_打开"></p><h3 id="3-3-外壳"><a href="#3-3-外壳" class="headerlink" title="3.3 外壳"></a>3.3 外壳</h3><p>我是随便找了个纸盒子贴起来的，目前没时间去美化。</p><h3 id="3-4-完成"><a href="#3-4-完成" class="headerlink" title="3.4 完成"></a>3.4 完成</h3><p>最后直接仍在桌上，没有用电池，插在小米的魔方插座上运行，目前稳定跑了可能有100多天了。</p><p><img src="https://pic.imgdb.cn/item/619107d32ab3f51d91d2040e.jpg" alt="05_放置"></p><h2 id="4-踩坑记录（注意事项）"><a href="#4-踩坑记录（注意事项）" class="headerlink" title="4.踩坑记录（注意事项）"></a>4.踩坑记录（注意事项）</h2><ul><li>不明白是我个人原因还是微雪的代码问题，大量写入文字会占用很多<code>动态内存</code>，然而程序的<code>存储空间</code>还有大量剩余，无法被利用，目前我没能力解决；</li><li>2000mah电池似乎只能撑半个月；</li><li>充电板发烫有点大，可能是我没好好焊接；</li><li>心知天气似乎只在早上6:00-8:00更新数据，所以中间可以长时间休眠，节约用电；</li><li>长期运行前，先裸机跑一段时间，看看有没有模块发热量较大，需要进行散热。</li></ul><h2 id="5-结束"><a href="#5-结束" class="headerlink" title="5.结束"></a>5.结束</h2><p>制作时间：高二下学期暑假网课开始之前</p></div></div><div class="article-copyright hairline"><p>本作品采用 <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a> 进行许可。</p></div><nav class="article-nav"><a href="/posts/archives/8b8a8c83.html/" id="article-nav-older" class="article-nav-link-wrap"><div class="article-nav-caption">上一篇</div><div class="article-nav-title">关于本站</div></a></nav><section class="share"><div class="share-title">分享</div><a class="share-item" target="_blank" href="https://twitter.com/share?text=墨水屏天气预报站 - ヾ(•ω•`)o&url=https://blog.znluckye.top/posts/archives/a871caea.html/"><box-icon type="logo" name="twitter"></box-icon></a><a class="share-item" target="_blank" href="https://www.facebook.com/sharer.php?title=墨水屏天气预报站 - ヾ(•ω•`)o&u=https://blog.znluckye.top/posts/archives/a871caea.html/"><box-icon name="facebook-square" type="logo"></box-icon></a></section></article><section class="comments"><div id="valine-container"></div></section><script src="//unpkg.com/valine/dist/Valine.min.js"></script><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></section></section><aside class="sidebar"><div class="widget" id="widget"><div class="widget-wrap"><div class="widget-inner"><div class="toc post-toc-html"></div></div></div><div class="widget-wrap widget-tags"><div class="widget-title"><span>Tags</span></div><div class="widget-inner"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DIY/" rel="tag">DIY</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%99%E7%A8%8B/" rel="tag">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%AB%99/" rel="tag">网站</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E4%B8%AD/" rel="tag">高中</a></li></ul></div></div><div class="widget-wrap widget-recent-posts"><div class="widget-title"><span>Recent Posts</span></div><div class="widget-inner"><ul><li><a href="/posts/archives/a871caea.html/">墨水屏天气预报站</a></li><li><a href="/posts/archives/8b8a8c83.html/">关于本站</a></li></ul></div></div><div class="widget-wrap widget-archive"><div class="widget-title"><span>Archive</span></div><div class="widget-inner"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a></li></ul></div></div></div><div id="backtop"><i class="icon icon-arrow-up"></i></div></aside></div></div><footer class="footer"><div class="footer-wave"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg></div><div class="footer-wrap"><div class="footer-inner">ヾ(•ω•`)o &copy; 2021<br>Powered By Hexo · Theme By <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Aomori</a></div></div></footer><script src="/dist/build.js?1633679241878.js"></script><script src="/dist/custom.js?1633679241878.js"></script></body></html>
